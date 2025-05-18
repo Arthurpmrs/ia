@@ -38,25 +38,30 @@ nlu:
     - de jeito nenhum
     - errado
 
-- intent: request_clothes
+- intent: request_shirt
   examples: |
+    - [camisa](clothes_type)
+    - quero comprar roupa
+    - preciso de roupas
+    - quero [camisa](clothes_type)
+    - estou procurando [camisa](clothes_type)
+    - você tem [camisa](clothes_type)
+    - procuro [camisa](clothes_type)
+    - quero ver [camisa](clothes_type)
+
+- intent: request_pants
+  examples: |
+    - [calça](clothes_type)
     - quero comprar roupa
     - preciso de roupas
     - quero [calça](clothes_type)
-    - quero [camisa](clothes_type)
     - estou procurando [calça](clothes_type)
-    - estou procurando [camisa](clothes_type)
     - você tem [calça](clothes_type)
-    - você tem [camisa](clothes_type)
     - procuro [calça](clothes_type)
-    - procuro [camisa](clothes_type)
     - quero ver [calça](clothes_type)
-    - quero ver [camisa](clothes_type)
 
 - intent: inform
   examples: |
-    - [calça](clothes_type)
-    - [camisa](clothes_type)
     - tamanho [34](pants_size)
     - tamanho [35](pants_size)
     - tamanho [36](pants_size)

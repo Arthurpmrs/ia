@@ -6,15 +6,21 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_ask_clothes_type
-  - intent: inform
+  - intent: request_pants
+    entities:
+    - clothes_type: "calça"
   - slot_was_set:
     - clothes_type: "calça"
   - action: utter_ask_pants_size
   - intent: inform
+    entities:
+    - pants_size: "34"
   - slot_was_set:
     - pants_size: "34"
   - action: utter_ask_pants_fit
   - intent: inform
+    entities:
+    - pants_fit: "slim fit"
   - slot_was_set:
     - pants_fit: "slim fit"
   - action: action_process_order
@@ -26,82 +32,108 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_ask_clothes_type
-  - intent: inform
+  - intent: request_shirt
+    entities:
+    - clothes_type: "camisa"
   - slot_was_set:
     - clothes_type: "camisa"
   - action: utter_ask_shirt_size
   - intent: inform
+    entities:
+    - shirt_size: "M"
   - slot_was_set:
     - shirt_size: "M"
   - action: utter_ask_collar_type
   - intent: inform
+    entities:
+    - collar_type: "gola v"
   - slot_was_set:
     - collar_type: "gola v"
   - action: action_process_order
   - intent: goodbye
   - action: utter_goodbye
 
-- story: pedido direto de calça
-  steps:
-  - intent: request_clothes
-    entities:
-    - clothes_type: "calça"
-  - slot_was_set:
-    - clothes_type: "calça"
-  - action: utter_ask_pants_size
-  - intent: inform
-  - slot_was_set:
-    - pants_size: "36"
-  - action: utter_ask_pants_fit
-  - intent: inform
-  - slot_was_set:
-    - pants_fit: "regular fit"
-  - action: action_process_order
+# - story: pedido direto de calça
+#   steps:
+#   - intent: request_clothes
+#     entities:
+#     - clothes_type: "calça"
+#   - slot_was_set:
+#     - clothes_type: "calça"
+#   - action: utter_ask_pants_size
+#   - intent: inform
+#     entities:
+#     - pants_size: "36"
+#   - slot_was_set:
+#     - pants_size: "36"
+#   - action: utter_ask_pants_fit
+#   - intent: inform
+#     entities:
+#     - pants_fit: "regular fit"
+#   - slot_was_set:
+#     - pants_fit: "regular fit"
+#   - action: action_process_order
 
-- story: pedido direto de camisa
-  steps:
-  - intent: request_clothes
-  - slot_was_set:
-    - clothes_type: "camisa"
-  - action: utter_ask_shirt_size
-  - intent: inform
-  - slot_was_set:
-    - shirt_size: "G"
-  - action: utter_ask_collar_type
-  - intent: inform
-  - slot_was_set:
-    - collar_type: "polo"
-  - action: action_process_order
+# - story: pedido direto de camisa
+#   steps:
+#   - intent: request_clothes
+#     entities:
+#     - clothes_type: "camisa"
+#   - slot_was_set:
+#     - clothes_type: "camisa"
+#   - action: utter_ask_shirt_size
+#   - intent: inform
+#     entities:
+#     - shirt_size: "G"
+#   - slot_was_set:
+#     - shirt_size: "G"
+#   - action: utter_ask_collar_type
+#   - intent: inform
+#     entities:
+#     - collar_type: "polo"
+#   - slot_was_set:
+#     - collar_type: "polo"
+#   - action: action_process_order
 
-# Adicionamos mais variações para tornar o modelo mais robusto
-- story: apenas calça sem saudação
-  steps:
-  - intent: inform
-    entities:
-    - clothes_type: "calça"
-  - slot_was_set:
-    - clothes_type: "calça"
-  - action: utter_ask_pants_size
-  - intent: inform
-  - slot_was_set:
-    - pants_size: "35"
-  - action: utter_ask_pants_fit
-  - intent: inform
-  - slot_was_set:
-    - pants_fit: "skinny fit"
-  - action: action_process_order
+# # Adicionamos mais variações para tornar o modelo mais robusto
+# - story: apenas calça sem saudação
+#   steps:
+#   - intent: inform
+#     entities:
+#     - clothes_type: "calça"
+#   - slot_was_set:
+#     - clothes_type: "calça"
+#   - action: utter_ask_pants_size
+#   - intent: inform
+#     entities:
+#     - pants_size: "35"
+#   - slot_was_set:
+#     - pants_size: "35"
+#   - action: utter_ask_pants_fit
+#   - intent: inform
+#     entities:
+#     - pants_fit: "skinny fit"
+#   - slot_was_set:
+#     - pants_fit: "skinny fit"
+#   - action: action_process_order
 
-- story: apenas camisa sem saudação
-  steps:
-  - intent: inform
-  - slot_was_set:
-    - clothes_type: "camisa"
-  - action: utter_ask_shirt_size
-  - intent: inform
-  - slot_was_set:
-    - shirt_size: "P"
-  - action: utter_ask_collar_type
-  - intent: inform
-  - slot_was_set:
-    - collar_type: "redonda"
-  - action: action_process_order
+# - story: apenas camisa sem saudação
+#   steps:
+#   - intent: inform
+#     entities:
+#     - clothes_type: "camisa"
+#   - slot_was_set:
+#     - clothes_type: "camisa"
+#   - action: utter_ask_shirt_size
+#   - intent: inform
+#     entities:
+#     - shirt_size: "P"
+#   - slot_was_set:
+#     - shirt_size: "P"
+#   - action: utter_ask_collar_type
+#   - intent: inform
+#     entities:
+#     - collar_type: "redonda"
+#   - slot_was_set:
+#     - collar_type: "redonda"
+#   - action: action_process_order
