@@ -1,0 +1,18 @@
+version: "3.1"
+
+rules:
+- rule: Say hello whenever the user greets
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_ask_clothes_type
+
+- rule: Say goodbye when the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Out-of-scope responses
+  steps:
+  - intent: out_of_scope
+  - action: utter_default

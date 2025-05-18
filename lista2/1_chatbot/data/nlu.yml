@@ -1,0 +1,88 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - olá
+    - oi
+    - bom dia
+    - boa tarde
+    - boa noite
+    - tudo bem
+    - como vai
+
+- intent: goodbye
+  examples: |
+    - tchau
+    - até logo
+    - até mais
+    - adeus
+    - obrigado
+    - obrigada
+
+- intent: affirm
+  examples: |
+    - sim
+    - claro
+    - correto
+    - com certeza
+    - está certo
+    - ok
+
+- intent: deny
+  examples: |
+    - não
+    - nunca
+    - acho que não
+    - não gosto disso
+    - de jeito nenhum
+    - errado
+
+- intent: request_clothes
+  examples: |
+    - quero comprar roupa
+    - preciso de roupas
+    - quero [calça](clothes_type)
+    - quero [camisa](clothes_type)
+    - estou procurando [calça](clothes_type)
+    - estou procurando [camisa](clothes_type)
+    - você tem [calça](clothes_type)
+    - você tem [camisa](clothes_type)
+    - procuro [calça](clothes_type)
+    - procuro [camisa](clothes_type)
+    - quero ver [calça](clothes_type)
+    - quero ver [camisa](clothes_type)
+
+- intent: inform
+  examples: |
+    - [calça](clothes_type)
+    - [camisa](clothes_type)
+    - tamanho [34](pants_size)
+    - tamanho [35](pants_size)
+    - tamanho [36](pants_size)
+    - tamanho [P](shirt_size)
+    - tamanho [M](shirt_size)
+    - tamanho [G](shirt_size)
+    - [34](pants_size)
+    - [35](pants_size)
+    - [36](pants_size)
+    - [P](shirt_size)
+    - [M](shirt_size)
+    - [G](shirt_size)
+    - [slim fit](pants_fit)
+    - [regular fit](pants_fit)
+    - [skinny fit](pants_fit)
+    - [gola v](collar_type)
+    - [gola redonda](collar_type)
+    - [gola polo](collar_type)
+    - [v](collar_type)
+    - [redonda](collar_type)
+    - [polo](collar_type)
+
+- intent: out_of_scope
+  examples: |
+    - quero pedir uma pizza
+    - que horas são
+    - você pode me contar uma piada
+    - qual é o sentido da vida
+    - quero falar com um humano

@@ -1,0 +1,88 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - inform
+  - request_clothes
+  - out_of_scope
+
+entities:
+  - clothes_type
+  - pants_size
+  - pants_fit
+  - shirt_size
+  - collar_type
+
+slots:
+  clothes_type:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: clothes_type
+  pants_size:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: pants_size
+  pants_fit:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: pants_fit
+  shirt_size:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: shirt_size
+  collar_type:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: collar_type
+
+responses:
+  utter_greet:
+    - text: "Olá! Bem-vindo à nossa loja de roupas. Como posso ajudar você hoje?"
+
+  utter_goodbye:
+    - text: "Obrigado por visitar nossa loja. Até logo!"
+
+  utter_ask_clothes_type:
+    - text: "O que você está procurando hoje? Uma camisa ou uma calça?"
+
+  utter_ask_pants_size:
+    - text: "Qual tamanho de calça você deseja? Temos os tamanhos 34, 35 e 36."
+
+  utter_ask_pants_fit:
+    - text: "Que tipo de fit você prefere para sua calça? Temos slim fit, regular fit e skinny fit."
+
+  utter_ask_shirt_size:
+    - text: "Qual tamanho de camisa você deseja? Temos P, M e G."
+
+  utter_ask_collar_type:
+    - text: "Qual tipo de gola você prefere? Temos gola V, redonda e polo."
+
+  utter_confirm_order:
+    - text: "Seu pedido está sendo processado. Você escolheu: {clothes_details}. Obrigado pela sua compra!"
+
+  utter_default:
+    - text: "Desculpe, não entendi. Pode repetir?"
+    
+  utter_fallback:
+    - text: "Desculpe, não consegui entender. Posso ajudar com informações sobre nossas calças ou camisas?"
+
+actions:
+  - action_process_order
+  - action_default_fallback
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
