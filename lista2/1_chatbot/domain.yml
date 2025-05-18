@@ -3,8 +3,6 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - affirm
-  - deny
   - inform
   - request_shirt
   - request_pants
@@ -77,8 +75,5 @@ responses:
   utter_default:
     - text: "Desculpe, não entendi. Pode repetir?"
     
-  utter_fallback:
-    - text: "Desculpe, não consegui entender. Posso ajudar com informações sobre nossas calças ou camisas?"
-
 actions:
   - action_process_order
