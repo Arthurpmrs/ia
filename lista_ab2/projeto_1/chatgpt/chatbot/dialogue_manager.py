@@ -5,6 +5,10 @@ class DialogueManager:
         self.collected_symptoms = {}
         self.required_symptoms = ['Febre', 'Tosse', 'DorCorpo', 'Fadiga']
 
+    def reset(self):
+        self.collected_symptoms = {}
+        self.required_symptoms = ['Febre', 'Tosse', 'DorCorpo', 'Fadiga']
+
     def process_message(self, message):
         lowered = message.lower()
         updated = False

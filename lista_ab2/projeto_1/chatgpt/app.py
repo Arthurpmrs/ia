@@ -1,4 +1,3 @@
-# diagnostic_system/app.py
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -22,6 +21,7 @@ async def chat(input: SymptomInput):
     if ready_for_diagnosis:
         diagnosis = run_diagnosis(structured_data)
         explanation = explain_diagnosis(structured_data, diagnosis)
+        chatbot.reset()
         return {
             "chatbot_reply": chatbot_reply,
             "diagnosis": diagnosis,
