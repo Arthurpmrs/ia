@@ -1,13 +1,15 @@
-from fastapi import FastAPI, Request
-from pydantic import BaseModel
 from chatbot.dialogue_manager import get_response
-from models.inference import run_diagnosis
 from explainability.explainer import explain_diagnosis
+from fastapi import FastAPI, Request
+from models.inference import run_diagnosis
+from pydantic import BaseModel
 
 app = FastAPI()
 
+
 class SymptomInput(BaseModel):
     message: str
+
 
 @app.post("/chat")
 async def chat(input: SymptomInput):
@@ -19,6 +21,6 @@ async def chat(input: SymptomInput):
         return {
             "chatbot_reply": chatbot_reply,
             "diagnosis": diagnosis,
-            "explanation": explanation
+            "explanation": explanation,
         }
     return {"chatbot_reply": chatbot_reply}
