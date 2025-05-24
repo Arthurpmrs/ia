@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avaliador de Candidatos - RH</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Classificador de Candidatos</h1>
+    <form id="form">
+      <label for="requisitos">Requisitos da vaga:</label>
+      <textarea id="requisitos" rows="5" placeholder="Descreva os requisitos da vaga..." required></textarea>
+
+      <label for="input">Informações do candidato:</label>
+      <textarea id="input" rows="5" placeholder="Cole as informações do candidato aqui..." required></textarea>
+
+      <button type="button" onclick="enviar()">Enviar</button>
+    </form>
+
+    <div class="resposta-container">
+      <h2>Resultado</h2>
+      <pre id="resposta">Preencha os campos acima e clique em Enviar.</pre>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
