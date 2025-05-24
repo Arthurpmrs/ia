@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Diagnóstico Médico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+        }
+
+        .chat-section {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .diagnosis-section {
+            padding: 30px;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            max-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.bot {
+            text-align: left;
+        }
+
+        .message-content {
+            display: inline-block;
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: #007bff;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot .message-content {
+            background: #e9ecef;
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        #messageInput {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+            resize: vertical;
+            min-height: 50px;
+            max-height: 150px;
+        }
+
+        #messageInput:focus {
+            border-color: #007bff;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .symptoms-list {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .symptoms-list h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .symptoms-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .symptom-tag {
+            background: #2196f3;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .diagnosis-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .diagnosis-content {
+            display: none;
+        }
+
+        .diagnosis-content.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .probability-chart {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .probability-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .probability-item.top {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+        }
+
+        .rank {
+            font-weight: bold;
+            margin-right: 15px;
+            color: #666;
+            min-width: 25px;
+        }
+
+        .disease-name {
+            flex: 1;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .probability-bar {
+            flex: 2;
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 4px;
+            transition: width 0.8s ease-out;
+        }
+
+        .probability-value {
+            font-weight: bold;
+            color: #28a745;
+            min-width: 50px;
+        }
+
+        .explanation-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .explanation-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .symptom-analysis {
+            margin-top: 15px;
+        }
+
+        .symptom-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .symptom-item:last-child {
+            border-bottom: none;
+        }
+
+        .recommendations-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .recommendations-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recommendation-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            line-height: 1.6;
+        }
+
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+
+        .recommendation-item.urgent {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-height: none;
+                margin: 10px;
+            }
+
+            .chat-section {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Seção do Chat -->
+        <div class="chat-section">
+            <div class="header">
+                <h1>🏥 Diagnóstico Médico IA</h1>
+                <div class="warning">
+                    <strong>⚠️ IMPORTANTE:</strong> Este sistema é apenas uma ferramenta de apoio e NÃO substitui a
+                    consulta médica profissional.
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Mensagens aparecerão aqui -->
+            </div>
+
+            <div class="symptoms-list" id="symptomsList" style="display: none;">
+                <h4>🔍 Sintomas Identificados:</h4>
+                <div class="symptoms-tags" id="symptomsContainer">
+                    <!-- Tags de sintomas aparecerão aqui -->
+                </div>
+            </div>
+
+            <div class="input-section">
+                <div class="input-group">
+                    <textarea id="messageInput"
+                        placeholder="Descreva seus sintomas aqui... (ex: 'Estou com febre e dor de cabeça')"
+                        rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" id="sendBtn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+                    </svg>
+                    Enviar
+                </button>
+                <button class="btn btn-success" id="diagnosisBtn" style="display: none;">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M9,11H7V9H9V11M13,7H11V13H13V7M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                    </svg>
+                    Gerar Diagnóstico
+                </button>
+                <button class="btn btn-secondary" id="resetBtn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+                    </svg>
+                    Nova Consulta
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processando...</p>
+            </div>
+        </div>
+
+        <!-- Seção do Diagnóstico -->
+        <div class="diagnosis-section">
+            <div class="diagnosis-header">
+                <h2>📊 Análise Diagnóstica</h2>
+                <p>Os resultados aparecerão aqui após a análise dos sintomas</p>
+            </div>
+
+            <div class="diagnosis-content" id="diagnosisContent">
+                <!-- Gráfico de Probabilidades -->
+                <div class="probability-chart">
+                    <h3>🎯 Probabilidades de Diagnóstico</h3>
+                    <div id="probabilityList">
+                        <!-- Items de probabilidade aparecerão aqui -->
+                    </div>
+                </div>
+
+                <!-- Explicação -->
+                <div class="explanation-section">
+                    <h3>
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path
+                                d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                        </svg>
+                        Explicação do Diagnóstico
+                    </h3>
+                    <div id="explanationText"></div>
+                    <div class="symptom-analysis" id="symptomAnalysis">
+                        <h4>Análise dos Sintomas:</h4>
+                        <div id="symptomAnalysisList"></div>
+                    </div>
+                </div>
+
+                <!-- Recomendações -->
+                <div class="recommendations-section">
+                    <h3>
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path
+                                d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
+                        </svg>
+                        Recomendações
+                    </h3>
+                    <div id="recommendationsList">
+                        <!-- Recomendações aparecerão aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MedicalDiagnosisApp {
+            constructor() {
+                this.sessionId = null;
+                this.initializeElements();
+                this.attachEventListeners();
+                this.startConversation();
+            }
+
+            initializeElements() {
+                this.chatMessages = document.getElementById('chatMessages');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendBtn = document.getElementById('sendBtn');
+                this.diagnosisBtn = document.getElementById('diagnosisBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.loading = document.getElementById('loading');
+                this.symptomsList = document.getElementById('symptomsList');
+                this.symptomsContainer = document.getElementById('symptomsContainer');
+                this.diagnosisContent = document.getElementById('diagnosisContent');
+            }
+
+            attachEventListeners() {
+                this.sendBtn.addEventListener('click', () => this.sendMessage());
+                this.diagnosisBtn.addEventListener('click', () => this.generateDiagnosis());
+                this.resetBtn.addEventListener('click', () => this.resetConversation());
+
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+            }
+
+            async startConversation() {
+                try {
+                    const response = await this.sendChatMessage('');
+                    this.handleChatResponse(response);
+                } catch (error) {
+                    this.showError('Erro ao iniciar conversa: ' + error.message);
+                }
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                this.messageInput.value = '';
+                this.showLoading(true);
+
+                try {
+                    const response = await this.sendChatMessage(message);
+                    this.handleChatResponse(response);
+                } catch (error) {
+                    this.showError('Erro ao enviar mensagem: ' + error.message);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            async sendChatMessage(message) {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: this.sessionId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return await response.json();
+            }
+
+            handleChatResponse(data) {
+                this.sessionId = data.session_id;
+                const response = data.response;
+
+                this.addMessage(response.message, 'bot');
+
+                if (response.symptoms && response.symptoms.length > 0) {
+                    this.updateSymptomsList(response.symptoms);
+                }
+
+                this.diagnosisBtn.style.display = response.show_diagnosis_button ? 'inline-flex' : 'none';
+
+                if (response.diagnosis) {
+                    this.showDiagnosis(response.diagnosis);
+                }
+
+                this.scrollToBottom();
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.innerHTML = text.replace(/\n/g, '<br>');
+
+                messageDiv.appendChild(contentDiv);
+                this.chatMessages.appendChild(messageDiv);
+
+                this.scrollToBottom();
+            }
+
+            updateSymptomsList(symptoms) {
+                if (symptoms.length > 0) {
+                    this.symptomsContainer.innerHTML = '';
+                    symptoms.forEach(symptom => {
+                        const tag = document.createElement('span');
+                        tag.className = 'symptom-tag';
+                        tag.textContent = symptom;
+                        this.symptomsContainer.appendChild(tag);
+                    });
+                    this.symptomsList.style.display = 'block';
+                } else {
+                    this.symptomsList.style.display = 'none';
+                }
+            }
+
+            async generateDiagnosis() {
+                if (!this.sessionId) return;
+
+                this.showLoading(true);
+
+                try {
+                    const response = await fetch('/api/diagnosis', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            session_id: this.sessionId
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.diagnosis && data.diagnosis.diagnosis) {
+                        this.showDiagnosis(data.diagnosis.diagnosis);
+                        this.addMessage('Diagnóstico gerado com sucesso! Confira os resultados na seção ao lado.', 'bot');
+                    }
+                } catch (error) {
+                    this.showError('Erro ao gerar diagnóstico: ' + error.message);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            showDiagnosis(diagnosis) {
+                // Mostrar seção de diagnóstico
+                this.diagnosisContent.classList.add('active');
+
+                // Probabilidades
+                const probabilityList = document.getElementById('probabilityList');
+                probabilityList.innerHTML = '';
+
+                diagnosis.probabilities.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = `probability-item ${index === 0 ? 'top' : ''}`;
+
+                    div.innerHTML = `
+                        <span class="rank">${item.rank}º</span>
+                        <span class="disease-name">${item.disease}</span>
+                        <div class="probability-bar">
+                            <div class="probability-fill" style="width: ${item.probability}%"></div>
+                        </div>
+                        <span class="probability-value">${item.probability.toFixed(1)}%</span>
+                    `;
+
+                    probabilityList.appendChild(div);
+                });
+
+                // Explicação
+                const explanationText = document.getElementById('explanationText');
+                explanationText.textContent = diagnosis.most_likely.explanation.text;
+
+                // Análise de sintomas
+                const symptomAnalysisList = document.getElementById('symptomAnalysisList');
+                symptomAnalysisList.innerHTML = '';
+
+                diagnosis.most_likely.explanation.relevant_symptoms.forEach(symptom => {
+                    const div = document.createElement('div');
+                    div.className = 'symptom-item';
+                    div.innerHTML = `
+                        <span>${symptom.symptom}</span>
+                        <span><strong>${symptom.probability.toFixed(0)}%</strong></span>
+                    `;
+                    symptomAnalysisList.appendChild(div);
+                });
+
+                // Recomendações
+                const recommendationsList = document.getElementById('recommendationsList');
+                recommendationsList.innerHTML = '';
+
+                diagnosis.most_likely.recommendations.forEach(rec => {
+                    const div = document.createElement('div');
+                    div.className = `recommendation-item ${rec.includes('⚠️') ? 'urgent' : ''}`;
+                    div.textContent = rec;
+                    recommendationsList.appendChild(div);
+                });
+
+                this.diagnosisBtn.style.display = 'none';
+            }
+
+            async resetConversation() {
+                if (this.sessionId) {
+                    try {
+                        await fetch('/api/reset', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                session_id: this.sessionId
+                            })
+                        });
+                    } catch (error) {
+                        console.error('Erro ao resetar sessão:', error);
+                    }
+                }
+
+                // Limpar interface
+                this.chatMessages.innerHTML = '';
+                this.symptomsList.style.display = 'none';
+                this.diagnosisContent.classList.remove('active');
+                this.diagnosisBtn.style.display = 'none';
+
+                // Reiniciar conversa
+                this.startConversation();
+            }
+
+            showLoading(show) {
+                this.loading.classList.toggle('active', show);
+                this.sendBtn.disabled = show;
+                this.diagnosisBtn.disabled = show;
+            }
+
+            showError(message) {
+                this.addMessage('❌ ' + message, 'bot');
+            }
+
+            scrollToBottom() {
+                setTimeout(() => {
+                    this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+                }, 100);
+            }
+        }
+
+        // Inicializar aplicação quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            new MedicalDiagnosisApp();
+        });
+    </script>
+</body>
+
+</html>
